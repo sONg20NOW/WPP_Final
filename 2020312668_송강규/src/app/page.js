@@ -15,7 +15,7 @@ export default async function Home( {searchParams} ) {
   } else {
     return (    
       <div className='flex flex-row flex-nowrap h-screen'>
-        <Sidebar Notes={Notes}/>
+        <Sidebar Notes={Notes} UserId={userId}/>
         <Main Notes={Notes}/>
       </div>
     );

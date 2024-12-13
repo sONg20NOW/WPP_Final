@@ -75,6 +75,23 @@ export const getUserIdByUserName = async (userName) => {
     }
 }
 
+export const getUserNameByUserId = async (userId) => {
+    try {
+        const User = await db.user.findUnique({
+            where: {id: userId}
+        })
+        if (!User) {
+            return "";
+        }
+
+        const userName = User.userName;
+        return userName;
+    } catch (error) {
+        console.log(error);
+        throw new Error("Failed to get user name by user id!");
+    }
+}
+
 // --- 기존의 HW3에 사용된 코드들 ---
 
 // 특정 user의 문서만 가져오도록 변경
