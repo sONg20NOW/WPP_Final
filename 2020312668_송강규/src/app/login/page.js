@@ -20,7 +20,7 @@ export default function LoginPage() {
                 newSearchParams.set('userId', userId);
                 const newPath = `/?${newSearchParams.toString()}`;
                 router.push(newPath);
-                toast.success(`Welcome, ${userName}!`);
+                toast(`Welcome, ${userName}!`);
             }
             else {
                 toast.error("login failed!")

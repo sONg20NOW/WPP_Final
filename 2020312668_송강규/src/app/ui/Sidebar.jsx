@@ -40,6 +40,7 @@ export default function Sidebar({ Notes, User }) {
 
     return (
         <div className="w-60 bg-zinc-100 p-0 flex flex-col m-0 text-zinc-900 text-xs font-bold">
+            {/* profile image */}
             <div className="hover:bg-zinc-200 flex justify-between my-1 py-1 px-1.5 m-2">
                 <Link href={newProfilePath} className="flex flex-row items-center cursor-pointer">
                   <img
@@ -50,12 +51,13 @@ export default function Sidebar({ Notes, User }) {
                   <p className="px-4 font-semibold text-3xl text-zinc-700">{User.userName}</p>
                 </Link>
             </div>
+            {/* setting 버튼과 search 버튼 */}
             <div className="m-1 mx-2">
                 <button
                     className="hover:bg-zinc-200 flex w-full justify-start items-center py-1 px-1.5 fill-zinc-500 text-zinc-500 font-bold text-sm mb-1"
                 >
                     <div className="mr-1.5">
-                      <svg className="w-5 h-5 h-full" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                      <svg className="size-5 h-full" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
                         <path fillRule="evenodd" d="M11.078 2.25c-.917 0-1.699.663-1.85 1.567L9.05 4.889c-.02.12-.115.26-.297.348a7.493 7.493 0 0 0-.986.57c-.166.115-.334.126-.45.083L6.3 5.508a1.875 1.875 0 0 0-2.282.819l-.922 1.597a1.875 1.875 0 0 0 .432 2.385l.84.692c.095.078.17.229.154.43a7.598 7.598 0 0 0 0 1.139c.015.2-.059.352-.153.43l-.841.692a1.875 1.875 0 0 0-.432 2.385l.922 1.597a1.875 1.875 0 0 0 2.282.818l1.019-.382c.115-.043.283-.031.45.082.312.214.641.405.985.57.182.088.277.228.297.35l.178 1.071c.151.904.933 1.567 1.85 1.567h1.844c.916 0 1.699-.663 1.85-1.567l.178-1.072c.02-.12.114-.26.297-.349.344-.165.673-.356.985-.57.167-.114.335-.125.45-.082l1.02.382a1.875 1.875 0 0 0 2.28-.819l.923-1.597a1.875 1.875 0 0 0-.432-2.385l-.84-.692c-.095-.078-.17-.229-.154-.43a7.614 7.614 0 0 0 0-1.139c-.016-.2.059-.352.153-.43l.84-.692c.708-.582.891-1.59.433-2.385l-.922-1.597a1.875 1.875 0 0 0-2.282-.818l-1.02.382c-.114.043-.282.031-.449-.083a7.49 7.49 0 0 0-.985-.57c-.183-.087-.277-.227-.297-.348l-.179-1.072a1.875 1.875 0 0 0-1.85-1.567h-1.843ZM12 15.75a3.75 3.75 0 1 0 0-7.5 3.75 3.75 0 0 0 0 7.5Z" clipRule="evenodd" />
                       </svg>
                     </div>
@@ -66,7 +68,7 @@ export default function Sidebar({ Notes, User }) {
                     className="hover:bg-zinc-200 flex w-full justify-start py-1 px-1.5 fill-zinc-500 text-zinc-500 font-bold text-sm mb-1"
                 >
                     <div className="mr-1.5">
-                        <svg role="graphics-symbol" viewBox="0 0 20 20" className="w-5 h-5 h-full">
+                        <svg role="graphics-symbol" viewBox="0 0 20 20" className="size-5 h-full">
                             <path
                                 fillRule="evenodd"
                                 clipRule="evenodd"
@@ -77,9 +79,11 @@ export default function Sidebar({ Notes, User }) {
                     Search
                 </button>
             </div>
+            {/* 디자인 */}
             <div className="ml-2.5 text-zinc-400 mb-1">
-                <p>Private</p>
+                <p>Notes</p>
             </div>
+            {/* 문서 목록 */}
             <div>
                 {Notes.map((Note) => (
                     <Doc key={Note.id} Notes={Notes} Note={Note} />
@@ -87,6 +91,7 @@ export default function Sidebar({ Notes, User }) {
                 <NewPage />
             </div>
 
+            {/* 검색창 */}
             {isSearchOpen && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
                     <div className="bg-white w-full max-w-lg p-5 rounded shadow">

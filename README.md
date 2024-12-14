@@ -13,7 +13,7 @@
 3. Profile Image
 4. TOC
 5. Favorite and Pin
-6. Theme and Fonts 
+6. Share
 
 # Patch Notes
 ## ver 1.0 (2024-12-13)
@@ -59,10 +59,23 @@
 + Doc.jsx
 0. 별표 svg 추가  
 [무료 svg 사이트](https://heroicons.com/)
-1. 스키마 Note에 pinned boolean 요소 추가 (default 값: false)
+1. 스키마 Note에 pinned (boolean) 요소 추가 (default 값: false)
 2. Notes 가져올 때 pinned 된 것들 먼저 오도록.
 3. un-pinned 상태에서는 hover 시에만 보이도록  
 `text-transparent` 사용
+## ver 7.0 (2024-12-14) - Share
++ Main.jsx actions.js
+1. 스키마 Note에 share (boolean) 요소 추가 (default 값: false)
+2. share 버튼 추가 (본인 문서에 한 해서만 나오고, 이미 share 된 문서라면 unshare 버튼으로 토글)
+3. share 버튼 누를 시 share 값 토글
+4. getNotes 시 shared된 문서들(share값이 true인 Note들)도 함께 표시
+
+## ver 7.1 (2024-12-14) - bug fix & design update
+1. ToC 버튼 위치 변경
+2. ToC 버튼을 Main.jsx로 옮겨서 문서가 바뀔 때마다 닫히도록
+3. svg 디자인 변경
+4. shared 된 문서도 search 되도록 변경
+
 # Dumb Dumbs (바보짓들)
 1. **problem**: 자꾸 actions.js에 있는 함수에서 
 ```

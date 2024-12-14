@@ -37,14 +37,15 @@ export default function ProfileEdit() {
 
     const handleSave = async () => {
         if (!image) {
-            toast.error("Please upload an image before saving.");
+            toast.error("Please upload an image!");
             return;
         }
 
         try {
             const response = await updateProfileImage(userId, image);
             if (response.success) {
-                toast.success("Profile image updated successfully!");
+                toast.success("Updated!");
+                router.push(`/?userId=${userId}`)
             } else {
                 toast.error(`Failed to update profile image: ${response.error}`);
             }

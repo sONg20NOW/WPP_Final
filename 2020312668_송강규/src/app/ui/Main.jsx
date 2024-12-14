@@ -1,17 +1,19 @@
 'use client';
 
-import { changeContent, changeTitle, getContent, getTitle } from "@/actions";
+import { changeContent, changeTitle, getContent, getTitle, getUserByNote, toggleShare } from "@/actions";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 import ToC from "./ToC";
+import { toast } from "react-toastify";
 
 export default function Main({ Notes }) {
     const router = useRouter();
     const searchParams = useSearchParams();
     const currentNoteId = parseInt(searchParams.get("id"), 10) || Notes[0]?.id;
+    const userId = searchParams.get("userId");
 
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
@@ -19,6 +21,14 @@ export default function Main({ Notes }) {
 
     // Text Formatting
     const [isMarkdown, setIsMarkdown] = useState(true);
+
+    // ToC
+    const [isToggle, setIsToggle] = useState(false);
+
+    // Share
+    const [userName, setUserName] = useState("");
+    const currentNote = Notes.find(Note => Note.id == currentNoteId);
+    const isMyNote = currentNote.userId == userId;
 
     useEffect(() => {
         let isMounted = true;
@@ -31,9 +41,12 @@ export default function Main({ Notes }) {
             try {
                 const title = await getTitle(currentNoteId);
                 const content = await getContent(currentNoteId);
+                const user = await getUserByNote(currentNote);
                 if (isMounted) {
                     setTitle(title || "");
                     setContent(content || "");
+                    setUserName(user?.userName || "");
+                    setIsToggle(false);
                 }
             } catch (error) {
                 console.error("Failed to fetch data:", error);
@@ -63,6 +76,11 @@ export default function Main({ Notes }) {
         router.refresh();
     };
 
+    const handleLogout = () => {
+        router.push('/login');
+        toast.info("Logged out!")
+    }
+
     if (loading) {
         return (
             <div className="flex items-center justify-center w-full h-full">
@@ -77,9 +95,7 @@ export default function Main({ Notes }) {
                 <span>There is no notes in DB. Please add a new note.</span>
                 <div className="fixed right-8 top-8 flex flex-col gap-2">
                     <button
-                        onClick={() => {
-                            router.push('/login');
-                        }}
+                        onClick={handleLogout}
                         className="btn btn-default"
                     >
                         Logout
@@ -115,18 +131,38 @@ export default function Main({ Notes }) {
                         />
                     )}
                 </div>
+                {!isMyNote && (
+                    <div className="mt-4 flex items-center justify-start gap-2 px-4 py-2 border rounded-lg bg-gray-100 dark:bg-neutral-800">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-5">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M7.217 10.907a2.25 2.25 0 1 0 0 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186 9.566-5.314m-9.566 7.5 9.566 5.314m0 0a2.25 2.25 0 1 0 3.935 2.186 2.25 2.25 0 0 0-3.935-2.186Zm0-12.814a2.25 2.25 0 1 0 3.933-2.185 2.25 2.25 0 0 0-3.933 2.185Z" />
+                        </svg>
+
+                        <span className="text-s font-medium text-gray-800 dark:text-gray-200">
+                            Shared by <span className="font-semibold text-blue-600 dark:text-blue-400">{userName}</span>
+                        </span>
+                    </div>
+                )}
             </div>
             <div className="flex-1">
-                <ToC markdownContent={content}/>
+                <ToC markdownContent={content} isToggle={isToggle}/>
             </div>
             <div className="fixed right-8 top-8 flex gap-2">
+                {(isMyNote) && 
+                (<button onClick={() => {
+                    toast.info(currentNote.share? "This note is un-shared!" : "This note is shared!", {autoClose: 1000})
+                    toggleShare(currentNote);
+                    router.refresh();
+                }}
+                className="btn btn-neutral">
+                    {currentNote.share ? "Un-share": "Share"}
+                </button>)}
                 <button
                     onClick={() => {
-                        router.push('/login');
+                        setIsToggle(!isToggle);
                     }}
-                    className="btn btn-default"
+                    className="btn btn-outline w-fit"
                 >
-                    Logout
+                    ToC
                 </button>
                 <button
                     onClick={() => {
@@ -135,6 +171,12 @@ export default function Main({ Notes }) {
                     className="btn btn-neutral"
                 >
                     {!isMarkdown ? "View" : "Edit"}
+                </button>
+                <button
+                    onClick={handleLogout}
+                    className="btn btn-default"
+                >
+                    Logout
                 </button>
             </div>
         </div>

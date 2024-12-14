@@ -91,7 +91,7 @@ export const getUserNameByUserId = async (userId) => {
     }
 }
 // --- Additional Function - 2. Search
-export const searchNotes = async (keyword, UserId) => {
+export const searchNotes = async (keyword, userId) => {
     try {
         const filter = keyword ? [{
             OR: [
@@ -105,13 +105,18 @@ export const searchNotes = async (keyword, UserId) => {
             return [];
         }
 
-        console.log(keyword, UserId, filter);
         const NotesFound = await db.note.findMany({
             where: {AND: [
                 ...filter,
-                {userId: UserId},
+                {OR: [
+                    {userId: userId},
+                    {share: true},
+                ]},
             ]},
-            orderBy: {id: 'asc'}
+            orderBy: [
+                {pinned: 'desc'}, 
+                {id: 'asc'}
+            ],
         });
 
         return NotesFound;
@@ -166,14 +171,44 @@ export const togglePinned = async (Note) => {
     }
 }
 
+// --- Additional Function - 6. Share
+export const toggleShare = async (Note) => {
+    const noteId = Note.id;
+    const share = Note.share;
+    try {
+        await db.note.update({
+            where: {id: noteId},
+            data: {share: !share}
+        });
+    } catch (error) {
+        console.log(error);
+        throw new Error("Failed to toggle share!");
+    }
+}
 
+export const getUserByNote = async (Note) => {
+    try {
+        const User = await db.user.findUnique({
+            where: {id: Note.userId}
+        })
+
+        return User;
+    } catch (error) {
+        console.log(error);
+        throw new Error("Failed to get username by note!");
+    }
+}
 // --- 기존의 HW3에 사용된 코드들 ---
 
 // 특정 user의 문서만 가져오도록 변경
 export const getNotes = async (userId) => {
     try {
         const Notes = await db.note.findMany({
-            where: {userId: userId},
+            where: {OR: 
+                [
+                    {userId: userId},
+                    {share: true},
+                ]},
             orderBy: [
                 {pinned: 'desc'}, 
                 {id: 'asc'}

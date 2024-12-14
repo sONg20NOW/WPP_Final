@@ -21,6 +21,7 @@ model Note {
   userId      Int
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   pinned      Boolean  @default(false)
+  share       Boolean  @default(false)
 }
 
 model Content {

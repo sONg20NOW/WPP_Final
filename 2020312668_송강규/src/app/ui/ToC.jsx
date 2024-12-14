@@ -2,9 +2,8 @@
 
 import { useEffect, useState } from "react";
 
-export default function ToC({markdownContent}) {
+export default function ToC({markdownContent, isToggle}) {
     const [toc, setToc] = useState([]);
-    const [isToggle, setIsToggle] = useState(false);
 
     // Markdown 헤더 추출
     useEffect(() => {
@@ -27,20 +26,13 @@ export default function ToC({markdownContent}) {
 
     return (
         <div className="flex flex-col gap-4 items-center justify-center mx-4">
-            <button
-                onClick={() => {
-                    setIsToggle(!isToggle);
-                }}
-                className="btn btn-outline w-fit"
-            >
-                ToC
-            </button>
+            
             {/* 목차 영역 */}
             {
                 isToggle && 
                     <div className="w-full p-4 bg-gray-100 rounded-xl">
                     <h2 className="font-bold mb-2">Table of Contents</h2>
-                    <ul className="list-disc pl-4">
+                    <ul className="list-disc px-8 py-2 bg-gray-300 rounded-xl">
                         {toc.map((header, index) => (
                             <li
                                 key={index}
