@@ -38,7 +38,6 @@ const Doc = ({Notes, Note}) => {
         e.stopPropagation();
         deletePage(Note);
         const remainNotes = await getNotes(userId);
-        console.log(remainNotes);
         if (active) {
           const firstNoteId = remainNotes[0]?.id || 0;
           if (firstNoteId) {

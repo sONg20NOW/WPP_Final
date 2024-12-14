@@ -7,7 +7,10 @@
 * remark-gfm
 * rehype-raw
 
-
+# Additional Functions
+1. Text Formatting
+2. Search
+3. Profile Image
 
 # Patch Notes
 ## ver 1.0 (2024-12-13)
@@ -29,22 +32,28 @@
 6. 아무 노트도 선택되지 않은 경우(문서가 없는 경우) New Page create 시에 새롭게 생성된 문서가 자동 선택
 7. Register 페이지에 Login 버튼 추가
 ## ver 2.0 (2024-12-13) - Text Formatting
++ Main.jsx
 1. Text Formatting 하려고 했는데 react-markdown이 의존성 충돌로 안깔림
 -> react를 18로 다운그레이드
 2. react-markdown으로 해결  
 3. edit/view 버튼 만들어서 토글 형식으로 마크다운 지원
 ## ver 3.0 (2024-12-14) - Search
++ SearchList.jsx Sidebar.jsx
 1. search button 생성
-2. click 시 창이 뜨도록
-
-
+2. search 버튼 click 시 창이 뜨도록
+3. search keyword 입력창에 입력이 바뀔 때마다 즉시즉시 검색
+4. 검색 결과 리스트 중 하나를 클릭하면 해당 페이지로 이동하고 검색창을 닫도록
+## ver 4.0 (2024-12-14) - Profile Image
++ src\app\profile\page.js sidebar.jsx
+1. profile image를 BLOB 형식으로 DB 저장
+2. BLOB 형식의 DB 데이터를 이미지로 변환
 # Dumb Dumbs (바보짓들)
 1. **problem**: 자꾸 actions.js에 있는 함수에서 
 ```
 Error: The "payload" argument must be of type object. Received null
 ```
 이런 에러가 떴음.
-**solution**: 스키마 구조와 상반된 변수 사용 중이었음
+**solution**: 스키마 구조와 다른 변수 사용 중이었음
 
 2. searchParams로 가져오는 값들은 string이므로 정수값의 경우에는 parseInt() 과정 필요.
 
@@ -60,3 +69,27 @@ const userId = parseInt(searchParams?.get("userId"), 10);
 searchParams뒤에 ? 추가하여 더 안정성 있게 바꿈.
 
 4. button의 default type은 submit으로 정의된다.
+
+5. sqlite에서는 mode: 'insensitive' (대소문자 구분 없는 검색)을 지원하지 않는다.  
+(PostgreSQL / MySQL에서만 지원)
+
+6. **problem**: 값이 늦게 반영
+```jsx
+const newKeyword = e.target.value;
+setKeyword(newKeyword);
+const newFoundNotes = await searchNotes(keyword, UserId);
+```
+
+**reason**: useState는 상태를 비동기적으로 업데이트.  
+
+**solution**: 
+```jsx
+const newKeyword = e.target.value;
+setKeyword(newKeyword);
+const newFoundNotes = await searchNotes(newKeyword, UserId);
+```
+
+7. payload error 뜨면 타입 값을 잘 확인하자...(중복)
+
+8. image가 제대로 안 뜨는 문제
+-> 

@@ -1,5 +1,4 @@
 'use server';
-import { use } from "react";
 import db from "./db";
 
 // --- Login & Register Part ---
@@ -89,6 +88,66 @@ export const getUserNameByUserId = async (userId) => {
     } catch (error) {
         console.log(error);
         throw new Error("Failed to get user name by user id!");
+    }
+}
+// --- Additional Function - 2. Search
+export const searchNotes = async (keyword, UserId) => {
+    try {
+        const filter = keyword ? [{
+            OR: [
+                {title: {contains: keyword}},
+                {contents: {
+                    value: {contains: keyword}
+                }},
+            ],
+        }] : [];
+        if (keyword.length == 0) {
+            return [];
+        }
+
+        console.log(keyword, UserId, filter);
+        const NotesFound = await db.note.findMany({
+            where: {AND: [
+                ...filter,
+                {userId: UserId},
+            ]},
+            orderBy: {id: 'asc'}
+        });
+
+        return NotesFound;
+    } catch (error) {
+        console.log(error);
+        throw new Error("Failed to search!");
+    }
+}
+
+// --- Additional Function - 3. Profile Image
+export const updateProfileImage = async (userId, profileImg) => {
+    try {
+        // DB 업데이트
+        await db.user.update({
+            where: { id: parseInt(userId, 10) },
+            data: { profileImg: Buffer.from(profileImg.split(",")[1], "base64") },
+        });
+
+        return { success: true };
+    } catch (error) {
+        console.error("Failed to update profile image:", error);
+        return { success: false, error: error.message };
+    }
+};
+
+
+export const getUserByUserId = async (userId) => {
+    try {
+        const User = await db.user.findUnique({
+            where: {id: userId}
+        })
+
+        return User;
+    } catch (error) {
+        console.log(error);
+        throw new Error("Failed to get user by user id!");
     }
 }
 

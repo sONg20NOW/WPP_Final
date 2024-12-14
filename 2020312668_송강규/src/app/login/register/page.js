@@ -13,10 +13,10 @@ export default function Home() {
             const response = await Register(formData);
             switch (response) {
                 case -2:
-                    toast.error("You must fill something in your password!")
+                    toast.error("Fill something in your password!")
                     break;
                 case -1:
-                    toast.error("You must fill something in your username!")
+                    toast.error("Fill something in your username!")
                     break;
                 case 0:
                     toast.error("The user id is Duplicated!");
@@ -30,8 +30,8 @@ export default function Home() {
                     break;
             }
             router.refresh();
-        }}className="flex flex-col gap-2 justify-center items-center h-screen w-screen">
-            <div className="font-bold text-4xl mb-16">Register</div>
+        }} className="flex flex-col gap-2 justify-center items-center h-screen w-screen">
+            <div className="font-bold text-4xl text-blue-500 mb-16">Register</div>
             <label className="input input-bordered flex items-center gap-2 w-max">
                 <svg
                 xmlns="http://www.w3.org/2000/svg"

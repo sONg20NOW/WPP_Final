@@ -19,7 +19,6 @@ export default function LoginPage() {
                 const userId = await getUserIdByUserName(userName);
                 newSearchParams.set('userId', userId);
                 const newPath = `/?${newSearchParams.toString()}`;
-                console.log(newPath);
                 router.push(newPath);
                 toast.success(`Welcome, ${userName}!`);
             }

@@ -18,7 +18,6 @@ const NewPage = () => {
         return;
       }
       const noteId = await createNewPage(userId);
-      console.log("noteId: ", noteId);
       const currentNoteId = parseInt(searchParams?.get("id"), 10) || 0;
       // 만약 현재 아무 노트도 선택되어 있지 않은 경우
       if (currentNoteId) {
