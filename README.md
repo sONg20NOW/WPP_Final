@@ -85,6 +85,10 @@
 ## ver 7.2 (2024-12-15) - bug fix
 1. search 문서를 누르면 해당 단어가 하이라이트 되도록
 
+## ver 7.3 (2024-12-15) - bug fix
+1. 마크다운 변환해서 보기 상태에서 검색하는 경우 하이라이트가 아니라 마크다운 변환 보기 상태 그대로 남는 버그 해결
+-> useEffect로 keyword가 바뀔 시 setIsMarkdown으로 상태 변경
+
 # Dumb Dumbs (바보짓들)
 1. **problem**: 자꾸 actions.js에 있는 함수에서 
 ```

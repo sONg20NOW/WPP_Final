@@ -65,7 +65,7 @@ export default function Main({ Notes }) {
 
     useEffect(() => {
         setIsMarkdown(true);
-    }, [keyword]);
+    }, [keyword])
 
     const handleTitleChange = (e) => {
         const newTitle = e.target.value;
@@ -215,11 +215,11 @@ export default function Main({ Notes }) {
                 </button>
                 <button
                     onClick={() => {
-                        setIsMarkdown(!isMarkdown);
                         const newSearchParams = new URLSearchParams(searchParams);
                         newSearchParams.delete('keyword');
                         const newPath = `/?${newSearchParams.toString()}`
                         router.push(newPath);
+                        setIsMarkdown(!isMarkdown);
                     }}
                     className="btn btn-neutral"
                 >
