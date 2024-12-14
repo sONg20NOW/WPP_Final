@@ -11,9 +11,9 @@
 1. Text Formatting
 2. Search
 3. Profile Image
-4. Favorite and Pin
-5. Theme and Fonts 
-6. TOC
+4. TOC
+5. Favorite and Pin
+6. Theme and Fonts 
 
 # Patch Notes
 ## ver 1.0 (2024-12-13)
@@ -55,6 +55,14 @@
 1. ToC 버튼 생성
 2. 토글 형식으로 버튼 누를 시 ToC 나옴
 3. Main의 오른쪽 사이드에 ToC 추가
+## ver 6.0 (2024-12-14) - Favorite and Pin
++ Doc.jsx
+0. 별표 svg 추가  
+[무료 svg 사이트](https://heroicons.com/)
+1. 스키마 Note에 pinned boolean 요소 추가 (default 값: false)
+2. Notes 가져올 때 pinned 된 것들 먼저 오도록.
+3. un-pinned 상태에서는 hover 시에만 보이도록  
+`text-transparent` 사용
 # Dumb Dumbs (바보짓들)
 1. **problem**: 자꾸 actions.js에 있는 함수에서 
 ```

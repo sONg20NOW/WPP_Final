@@ -20,6 +20,7 @@ model Note {
   contents    Content? 
   userId      Int
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  pinned      Boolean  @default(false)
 }
 
 model Content {

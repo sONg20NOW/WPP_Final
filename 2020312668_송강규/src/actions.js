@@ -151,6 +151,22 @@ export const getUserByUserId = async (userId) => {
     }
 }
 
+// --- Additional Function - 5. Favorite and Pin
+export const togglePinned = async (Note) => {
+    const noteId = Note.id;
+    const pinned = Note.pinned;
+    try {
+        await db.note.update({
+            where: {id: noteId},
+            data: {pinned: !pinned}
+        });
+    } catch (error) {
+        console.log(error);
+        throw new Error("Failed to toggle pinned!");
+    }
+}
+
+
 // --- 기존의 HW3에 사용된 코드들 ---
 
 // 특정 user의 문서만 가져오도록 변경
@@ -158,8 +174,11 @@ export const getNotes = async (userId) => {
     try {
         const Notes = await db.note.findMany({
             where: {userId: userId},
-            orderBy: {id: 'asc'}
-        });  
+            orderBy: [
+                {pinned: 'desc'}, 
+                {id: 'asc'}
+            ],
+        }); 
 
         return Notes;
     } catch (error) {
