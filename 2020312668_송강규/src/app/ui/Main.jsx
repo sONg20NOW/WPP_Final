@@ -13,7 +13,8 @@ export default function Main({ Notes }) {
     const router = useRouter();
     const searchParams = useSearchParams();
     const currentNoteId = parseInt(searchParams.get("id"), 10) || Notes[0]?.id;
-    const userId = searchParams.get("userId");
+    const userId = searchParams.get('userId');
+    const keyword = searchParams.get('keyword') || "";
 
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
@@ -62,6 +63,10 @@ export default function Main({ Notes }) {
         };
     }, [currentNoteId]);
 
+    useEffect(() => {
+        setIsMarkdown(true);
+    }, [keyword]);
+
     const handleTitleChange = (e) => {
         const newTitle = e.target.value;
         setTitle(newTitle);
@@ -80,6 +85,32 @@ export default function Main({ Notes }) {
         router.push('/login');
         toast.info("Logged out!")
     }
+
+    const highlightKeyword = (text, keyword) => {
+        if (!keyword.trim()) return text.split("\n").map((line, index) => (
+            <span key={index}>
+                {line}
+                <br />
+            </span>
+        )); // Return text with line breaks if keyword is empty
+    
+        const regex = new RegExp(`(${keyword})`, "gi");
+        const parts = text.split("\n").map((line, lineIndex) => (
+            <span key={lineIndex}>
+                {line.split(regex).map((part, index) =>
+                    regex.test(part) ? (
+                        <mark key={index} className="bg-yellow-300">
+                            {part}
+                        </mark>
+                    ) : (
+                        <span key={index}>{part}</span>
+                    )
+                )}
+                <br />
+            </span>
+        ));
+        return parts;
+    };
 
     if (loading) {
         return (
@@ -105,15 +136,25 @@ export default function Main({ Notes }) {
         );
     }
 
+    const commonStyle = "w-full h-full rounded-lg border-2 border-gray-200 px-2 text-black dark:bg-neutral-200";
+
     return (
         <div className="grow py-32 m-0 text-zinc-900 bg-white text-lg dark:bg-neutral-950 dark:text-white flex justify-center">
             <div className="flex-1"></div>
-            <div className="flex-grow">
-                <input
-                    value={title}
-                    onChange={handleTitleChange}
-                    className="rounded-md focus:outline-none focus:border-sky-300 focus:ring-sky-300 focus:ring-2 text-4xl font-bold w-full h-12 mb-12 px-1 text-zinc-900 bg-white dark:bg-neutral-950 dark:text-white"
-                />
+            <div className="flex-[2]">
+                {!keyword.trim() ? (
+                    // 일반 제목
+                    <input
+                        value={title}
+                        onChange={handleTitleChange}
+                        className="rounded-md focus:outline-none focus:border-sky-300 focus:ring-sky-300 focus:ring-2 text-4xl font-bold w-full h-12 mb-12 px-1 text-zinc-900 bg-white dark:bg-neutral-950 dark:text-white"
+                    />
+                ) : (
+                    // 검색 결과 제목
+                    <div
+                        className="rounded-md focus:outline-none focus:border-sky-300 focus:ring-sky-300 focus:ring-2 text-4xl font-bold w-full h-12 mb-12 px-1 text-zinc-900 bg-white dark:bg-neutral-950 dark:text-white"
+                    >{highlightKeyword(title, keyword)}</div>
+                )}
                 <div className="w-full h-4/5 border-2 border-gray-200 rounded-lg overflow-y-auto">
                     {!isMarkdown ? (
                         <Markdown
@@ -124,11 +165,19 @@ export default function Main({ Notes }) {
                             {content}
                         </Markdown>
                     ) : (
-                        <textarea
-                            value={content}
-                            onChange={handleContentChange}
-                            className="w-full h-full rounded-lg focus:outline-none focus:border-sky-300 focus:ring-sky-300 focus:ring-0.5 text-black px-2 dark:bg-neutral-200"
-                        />
+                        !keyword.trim() ? (
+                            // 일반 내용
+                            <textarea
+                                value={content}
+                                onChange={handleContentChange}
+                                className="w-full h-full rounded-lg focus:outline-none focus:border-sky-300 focus:ring-sky-300 focus:ring-0.5 text-black px-2 dark:bg-neutral-200"
+                            />
+                        ) : (
+                            // 검색 결과 내용
+                            <div
+                                className="w-full h-full rounded-lg focus:outline-none focus:border-sky-300 focus:ring-sky-300 focus:ring-0.5 text-black px-2 dark:bg-neutral-200"
+                            >{highlightKeyword(content, keyword)}</div>
+                        )
                     )}
                 </div>
                 {!isMyNote && (
@@ -167,10 +216,14 @@ export default function Main({ Notes }) {
                 <button
                     onClick={() => {
                         setIsMarkdown(!isMarkdown);
+                        const newSearchParams = new URLSearchParams(searchParams);
+                        newSearchParams.delete('keyword');
+                        const newPath = `/?${newSearchParams.toString()}`
+                        router.push(newPath);
                     }}
                     className="btn btn-neutral"
                 >
-                    {!isMarkdown ? "View" : "Edit"}
+                    {keyword.trim() ? ("Highlight") : (!isMarkdown ? "View" : "Edit")}
                 </button>
                 <button
                     onClick={handleLogout}

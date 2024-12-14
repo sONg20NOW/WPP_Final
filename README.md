@@ -7,6 +7,12 @@
 * remark-gfm
 * rehype-raw
 
+# Basic Function
+1. Login / Register
+2. Add New Note (HW3)
+3. Modify Note (HW3)
+4. Delete Note
+
 # Additional Functions
 1. Text Formatting
 2. Search
@@ -76,6 +82,9 @@
 3. svg 디자인 변경
 4. shared 된 문서도 search 되도록 변경
 
+## ver 7.2 (2024-12-15) - bug fix
+1. search 문서를 누르면 해당 단어가 하이라이트 되도록
+
 # Dumb Dumbs (바보짓들)
 1. **problem**: 자꾸 actions.js에 있는 함수에서 
 ```
@@ -122,3 +131,7 @@ const newFoundNotes = await searchNotes(newKeyword, UserId);
 
 8. image가 제대로 안 뜨는 문제
 -> 
+
+9. flex로 비율로 나누고 싶은 경우
+flex-1 & flex-[2] & flex-[3]  
+이런 식으로 사용하면 됨.

@@ -20,6 +20,7 @@ const Doc = ({Notes, Note}) => {
   const SelectPage = () => {
     const newSearchParams = new URLSearchParams(searchParams);
     newSearchParams.set('id', Note.id);
+    newSearchParams.delete('keyword');
     const newPath = `/?${newSearchParams.toString()}`;
     router.push(newPath);
   }

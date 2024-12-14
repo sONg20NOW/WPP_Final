@@ -9,6 +9,7 @@ export default function SearchList({ NotesFound, keyword, setIsSearchOpen }) {
     const selectList = (Note) => {
         const newSearchParams = new URLSearchParams(searchParams);
         newSearchParams.set('id', Note.id);
+        newSearchParams.set('keyword', keyword);
         const newPath = `/?${newSearchParams.toString()}`;
         setIsSearchOpen(false);
         router.push(newPath);
