@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
+import ToC from "./ToC";
 
 export default function Main({ Notes }) {
     const router = useRouter();
@@ -115,7 +116,9 @@ export default function Main({ Notes }) {
                     )}
                 </div>
             </div>
-            <div className="flex-1"></div>
+            <div className="flex-1">
+                <ToC markdownContent={content}/>
+            </div>
             <div className="fixed right-8 top-8 flex gap-2">
                 <button
                     onClick={() => {

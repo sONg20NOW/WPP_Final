@@ -11,6 +11,9 @@
 1. Text Formatting
 2. Search
 3. Profile Image
+4. Favorite and Pin
+5. Theme and Fonts 
+6. TOC
 
 # Patch Notes
 ## ver 1.0 (2024-12-13)
@@ -47,6 +50,11 @@
 + src\app\profile\page.js sidebar.jsx
 1. profile image를 BLOB 형식으로 DB 저장
 2. BLOB 형식의 DB 데이터를 이미지로 변환
+## ver 5.0 (2024-12-14) -ToC
++ Toc.jsx
+1. ToC 버튼 생성
+2. 토글 형식으로 버튼 누를 시 ToC 나옴
+3. Main의 오른쪽 사이드에 ToC 추가
 # Dumb Dumbs (바보짓들)
 1. **problem**: 자꾸 actions.js에 있는 함수에서 
 ```
