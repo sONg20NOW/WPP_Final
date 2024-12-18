@@ -29,7 +29,7 @@ export default function Main({ Notes }) {
     // Share
     const [userName, setUserName] = useState("");
     const currentNote = Notes.find(Note => Note.id == currentNoteId);
-    const isMyNote = currentNote.userId == userId;
+    const isMyNote = (currentNote?.userId == userId) || false;
 
     useEffect(() => {
         let isMounted = true;
